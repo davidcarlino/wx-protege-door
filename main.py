@@ -7,6 +7,18 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.edge.options import Options
 import time
 import threading
+import os
+import sys
+
+# Function to dynamically locate resources (e.g., favicon.ico)
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for development and PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores the path in _MEIPASS
+        base_path = sys._MEIPASS
+    except AttributeError:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 # Account credentials
 account_2 = 'david'
@@ -91,17 +103,18 @@ def reset_button_text():
 window = Tk()
 window.title("Control Panel")
 window.configure(bg="black")
-window.geometry("320x180")
+window.geometry("420x300")  # Set the window dimensions (20px wider)
 
 # Set the window icon
+icon_path = resource_path("favicon.ico")
 try:
-    window.iconbitmap("favicon.ico")
+    window.iconbitmap(icon_path)
 except Exception as e:
     print(f"Error setting window icon: {e}")
 
 # Load and display the favicon.ico
 try:
-    img = Image.open("favicon.ico")
+    img = Image.open(icon_path)
     img = img.resize((64, 64))
     icon = ImageTk.PhotoImage(img)
     icon_label = Label(window, image=icon, bg="black")
